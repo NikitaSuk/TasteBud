@@ -1,1 +1,28 @@
 
+<!-- app/templates/results.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodFinder - Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>FoodFinder - Results</h1>
+        <ul>
+            {% for restaurant in recommendations %}
+                <li>
+                    <h2>{{ restaurant.name }}</h2>
+                    <p>Food Type: {{ restaurant.food_type }}</p>
+                    <p>Price Range: {{ restaurant.price_range }}</p>
+                    <p>Rating: {{ restaurant.rating }}</p>
+                    <!-- Add more restaurant details here -->
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

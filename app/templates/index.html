@@ -16,105 +16,23 @@
             <div class="form-group">
                 <label for="foodTypes">Select your food type:</label>
                 <select name="foodTypes" id="foodTypes" class="form-control">
-                    <optgroup label="American">
-                        <option value="American">American</option>
-                        <option value="Bar">Bar</option>
-                        <option value="Burgers">Burgers</option>
-                        <option value="BBQ">BBQ</option>
-                        <option value="Sports Bar">Sports Bar</option>
-                        <option value="Burger">Burger</option>
-                        <option value="New American">New American</option>
-                        <option value="Cheesecake">Cheesecake</option>
-                        <option value="Diner">Diner</option>
-                        <option value="Grill">Grill</option>
-                        <option value="Southern">Southern</option>
-                    </optgroup>
-                    <optgroup label="Italian">
-                        <option value="Italian">Italian</option>
-                        <option value="Mediterranean">Mediterranean</option>
-                        <option value="Greek">Greek</option>
-                        <option value="Pizza">Pizza</option>
-                        <option value="Pasta">Pasta</option>
-                        <option value="Deli">Deli</option>
-                    </optgroup>
-                    <optgroup label="Mexican">
-                        <option value="Mexican">Mexican</option>
-                        <option value="Fast Food">Fast Food</option>
-                        <option value="Sports Bar">Sports Bar</option>
-                        <option value="Seafood">Seafood</option>
-                        <option value="Asian">Asian</option>
-                        <option value="Salvadoran">Salvadoran</option>
-                        <option value="Grill">Grill</option>
-                        <option value="Exotic">Exotic</option>
-                        <option value="Fine Dining">Fine Dining</option>
-                        <option value="Family-friendly">Family-friendly</option>
-                    </optgroup>
-                    <optgroup label="Asian">
-                        <option value="Thai">Thai</option>
-                        <option value="Ramen">Ramen</option>
-                        <option value="Seafood">Seafood</option>
-                        <option value="Buffet">Buffet</option>
-                        <option value="Vietnamese">Vietnamese</option>
-                        <option value="Korean">Korean</option>
-                        <option value="Japanese">Japanese</option>
-                        <option value="Chinese">Chinese</option>
-                    </optgroup>
-                    <optgroup label="Seafood">
-                        <option value="Seafood">Seafood</option>
-                        <option value="Steak">Steak</option>
-                        <option value="Sushi">Sushi</option>
-                    </optgroup>
-                    <optgroup label="Fast Food">
-                        <option value="Fast Food">Fast Food</option>
-                        <option value="Chicken Sandwiches">Chicken Sandwiches</option>
-                        <option value="Burgers">Burgers</option>
-                        <option value="Sandwiches">Sandwiches</option>
-                    </optgroup>
-                    <optgroup label="Sandwiches & Deli">
-                        <option value="Takeout">Takeout</option>
-                        <option value="Cafe">Cafe</option>
-                        <option value="Bakery">Bakery</option>
-                        <option value="Sandwich">Sandwich</option>
-                    </optgroup>
-                    <optgroup label="Pizza">
-                        <option value="Pizza">Pizza</option>
-                    </optgroup>
-                    <optgroup label="Steak & BBQ">
-                        <option value="Steak">Steak</option>
-                        <option value="Sushi">Sushi</option>
-                        <option value="Burgers">Burgers</option>
-                    </optgroup>
-                    <optgroup label="Other International">
-                        <option value="Eastern European">Eastern European</option>
-                        <option value="Pan-European">Pan-European</option>
-                        <option value="French">French</option>
-                        <option value="Jamaican">Jamaican</option>
-                        <option value="Dominican">Dominican</option>
-                        <option value="Bangladeshi">Bangladeshi</option>
-                        <option value="Barbeque">Barbeque</option>
-                        <option value="African">African</option>
-                        <option value="Colombian">Colombian</option>
-                        <option value="Wings">Wings</option>
-                        <option value="Indian">Indian</option>
-                        <option value="Exotic">Exotic</option>
-                        <option value="Brunch">Brunch</option>
-                        <option value="Sports Bar">Sports Bar</option>
-                        <option value="Restaurant">Restaurant</option>
-                        <option value="Fine Dining">Fine Dining</option>
-                    </optgroup>
-                    <optgroup label="Other">
-                        <option value="Bar">Bar</option>
-                        <option value="Chicken">Chicken</option>
-                        <option value="New American">New American</option>
-                        <option value="Exotic">Exotic</option>
-                        <option value="Brunch">Brunch</option>
-                        <option value="Family-friendly">Family-friendly</option>
-                        <option value="Sports Bar">Sports Bar</option>
-                        <option value="Restaurant">Restaurant</option>
-                        <option value="French">French</option>
-                        <option value="Grill">Grill</option>
-                    </optgroup>
+                    <option value="American">American</option>
+                    <option value="Italian">Italian</option>
+                    <option value="Mexican">Mexican</option>
+                    <option value="Asian">Asian</option>
+                    <option value="Seafood">Seafood</option>
+                    <option value="Fast Food">Fast Food</option>
+                    <option value="Sandwiches & Deli">Sandwiches & Deli</option>
+                    <option value="Pizza">Pizza</option>
+                    <option value="Steak & BBQ">Steak & BBQ</option>
+                    <option value="Other International">Other International</option>
+                    <option value="Other">Other</option>
                 </select>
+                
+                <!-- Side dropdown for refined options -->
+                <div id="refinedOptions" class="refined-options">
+                    <!-- Options will be populated using JavaScript -->
+                </div>
             </div>
             
             <button type="submit" class="btn btn-primary">Recommend</button>
@@ -129,7 +47,77 @@
                 placeholder: "Search for food types",
                 allowClear: true
             });
+
+            // Define the refined options
+            var refinedOptions = {
+                'American': ['American', 'Bar', 'Burgers', 'BBQ', 'Sports Bar', 'Burger', 'New American', 'Cheesecake', 'Diner', 'Grill', 'Southern'],
+                'Italian': ['Italian', 'Mediterranean', 'Greek', 'Pizza', 'Pasta', 'Deli'],
+                'Mexican': ['Mexican', 'Fast Food', 'Sports Bar', 'Seafood', 'Asian', 'Salvadoran', 'Grill', 'Exotic', 'Fine Dining', 'Family-friendly'],
+                'Asian': ['Thai', 'Ramen', 'Seafood', 'Buffet', 'Vietnamese', 'Korean', 'Japanese', 'Chinese'],
+                'Seafood': ['Seafood', 'Steak', 'Sushi'],
+                'Fast Food': ['Fast Food', 'Chicken Sandwiches', 'Burgers', 'Sandwiches'],
+                'Sandwiches & Deli': ['Takeout', 'Cafe', 'Bakery', 'Sandwich'],
+                'Pizza': ['Pizza'],
+                'Steak & BBQ': ['Steak', 'Sushi', 'Burgers'],
+                'Other International': ['Eastern European', 'Pan-European', 'French', 'Jamaican', 'Dominican', 'Bangladeshi', 'Barbeque', 'African', 'Colombian', 'Wings', 'Indian', 'Exotic', 'Brunch', 'Sports Bar', 'Restaurant', 'Fine Dining'],
+                'Other': ['Bar', 'Chicken', 'New American', 'Exotic', 'Brunch', 'Family-friendly', 'Sports Bar', 'Restaurant', 'French', 'Grill']
+            };
+
+            $('#foodTypes').on('change', function() {
+                var selectedOption = $(this).val();
+                var options = refinedOptions[selectedOption] || [];
+                var refinedSelect = $('#refinedOptions');
+                
+                refinedSelect.empty();
+                for (var i = 0; i < options.length; i++) {
+                    refinedSelect.append($('<option>', {
+                        value: options[i],
+                        text: options[i]
+                    }));
+                }
+
+                refinedSelect.select2({
+                    placeholder: "Search for refined food types",
+                    allowClear: true
+                });
+            });
+            
+            // Display the refined options side dropdown when hovering over or clicking on an option
+            $('#foodTypes').on('select2:opening', function(e) {
+                var $select = $(this);
+                var $container = $select.data('select2').$dropdown;
+                var $dropdown = $('<div class="refined-dropdown"></div>');
+                var selectedOption = $select.val();
+                var options = refinedOptions[selectedOption] || [];
+                
+                $dropdown.html('<select id="refinedOptionsDropdown" class="form-control"></select>');
+                var refinedSelect = $dropdown.find('#refinedOptionsDropdown');
+                
+                for (var i = 0; i < options.length; i++) {
+                    refinedSelect.append($('<option>', {
+                        value: options[i],
+                        text: options[i]
+                    }));
+                }
+
+                refinedSelect.select2({
+                    placeholder: "Search for refined food types",
+                    allowClear: true
+                });
+
+                $container.append($dropdown);
+            });
         });
     </script>
+    
+    <style>
+        .refined-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 100%;
+            width: 200px;
+            z-index: 9999;
+        }
+    </style>
 </body>
 </html>

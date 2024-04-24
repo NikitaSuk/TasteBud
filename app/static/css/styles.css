@@ -57,3 +57,60 @@
   
   /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
   .show {display:block;}
+/* app/static/css/styles.css */
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  color: #333333;
+}
+
+form {
+  margin-top: 20px;
+}
+
+label, select, input {
+  margin-bottom: 10px;
+}
+
+select, input[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  background-color: #ffffff;
+}
+
+li h2 {
+  color: #333333;
+  margin-top: 0;
+}
+
+li p {
+  margin: 5px 0;
+}

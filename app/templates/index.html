@@ -85,35 +85,39 @@
             // Display the refined options side dropdown when hovering over or clicking on an option
             $('#foodTypes').on('select2:opening', function(e) {
                 var $select = $(this);
-                var $container = $select.data('select2').$dropdown;
-                var $dropdown = $('<div class="refined-dropdown"></div>');
+                var $dropdown = $('<select id="refinedOptionsDropdown" class="form-control"></select>');
                 var selectedOption = $select.val();
                 var options = refinedOptions[selectedOption] || [];
                 
-                $dropdown.html('<select id="refinedOptionsDropdown" class="form-control"></select>');
-                var refinedSelect = $dropdown.find('#refinedOptionsDropdown');
-                
                 for (var i = 0; i < options.length; i++) {
-                    refinedSelect.append($('<option>', {
+                    $dropdown.append($('<option>', {
                         value: options[i],
                         text: options[i]
                     }));
                 }
 
-                refinedSelect.select2({
+                $dropdown.select2({
                     placeholder: "Search for refined food types",
                     allowClear: true
                 });
 
-                $container.append($dropdown);
+                $dropdown.on('select2:select', function(e) {
+                    $select.val(e.params.data.text).trigger('change');
+                });
+
+                $('.refined-options').html($dropdown);
             });
         });
     </script>
     
     <style>
-        .refined-dropdown {
+        .refined-options {
+            position: relative;
+        }
+
+        #refinedOptionsDropdown {
             position: absolute;
-            top: 100%;
+            top: 0;
             left: 100%;
             width: 200px;
             z-index: 9999;

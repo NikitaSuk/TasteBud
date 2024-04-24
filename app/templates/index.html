@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Restaurant Recommender</title>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
@@ -13,26 +14,77 @@
     <main>
         <form action="/recommend" method="post">
             <div class="form-group">
-                <label for="preferences">Select your preferred food types:</label>
-                <select name="preferences" id="preferences" multiple class="form-control">
+                <label for="generalType">Select your general food type:</label>
+                <select name="generalType" id="generalType" class="form-control">
                     <option value="American">American</option>
                     <option value="Italian">Italian</option>
                     <option value="Mexican">Mexican</option>
-                    <option value="Chinese">Chinese</option>
-                    <option value="Japanese">Japanese</option>
-                    <option value="Indian">Indian</option>
-                    <option value="Mediterranean">Mediterranean</option>
-                    <option value="Thai">Thai</option>
-                    <option value="Chicken">Chicken</option>
-                    <option value="Vegan">Vegan</option>
-                    <option value="Sports Bar">Sports Bar</option>
+                    <option value="Asian">Asian</option>
                     <option value="Seafood">Seafood</option>
-                    <option value="Steakhouse">Steakhouse</option>
                     <option value="Fast Food">Fast Food</option>
+                    <option value="Sandwiches & Deli">Sandwiches & Deli</option>
+                    <option value="Pizza">Pizza</option>
+                    <option value="Steak & BBQ">Steak & BBQ</option>
+                    <option value="Other International">Other International</option>
+                    <option value="Other">Other</option>
                 </select>
             </div>
+            
+            <div class="form-group" id="refinedOptions" style="display: none;">
+                <label for="refinedType">Select refined food type:</label>
+                <select name="refinedType" id="refinedType" class="form-control">
+                    <!-- Options will be populated using JavaScript -->
+                </select>
+            </div>
+            
             <button type="submit" class="btn btn-primary">Recommend</button>
         </form>
     </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#generalType').select2({
+                placeholder: "Search for general food types",
+                allowClear: true
+            });
+
+            // Define the refined options
+            var refinedOptions = {
+                'American': ['American', 'Bar', 'Burgers', 'BBQ', 'Sports Bar', 'Burger', 'New American', 'Cheesecake', 'Diner', 'Grill', 'Southern'],
+                'Italian': ['Italian', 'Mediterranean', 'Greek', 'Pizza', 'Pasta', 'Deli'],
+                'Mexican': ['Mexican', 'Fast Food', 'Sports Bar', 'Seafood', 'Asian', 'Salvadoran', 'Grill', 'Exotic', 'Fine Dining', 'Family-friendly'],
+                'Asian': ['Thai', 'Ramen', 'Seafood', 'Buffet', 'Vietnamese', 'Korean', 'Japanese', 'Chinese'],
+                'Seafood': ['Seafood', 'Steak', 'Sushi'],
+                'Fast Food': ['Fast Food', 'Chicken Sandwiches', 'Burgers', 'Sandwiches'],
+                'Sandwiches & Deli': ['Takeout', 'Cafe', 'Bakery', 'Sandwich'],
+                'Pizza': ['Pizza'],
+                'Steak & BBQ': ['Steak', 'Sushi', 'Burgers'],
+                'Other International': ['Eastern European', 'Pan-European', 'French', 'Jamaican', 'Dominican', 'Bangladeshi', 'Barbeque', 'African', 'Colombian', 'Wings', 'Indian', 'Exotic', 'Brunch', 'Sports Bar', 'Restaurant', 'Fine Dining'],
+                'Other': ['Bar', 'Chicken', 'New American', 'Exotic', 'Brunch', 'Family-friendly', 'Sports Bar', 'Restaurant', 'French', 'Grill']
+            };
+
+            $('#generalType').on('change', function() {
+                var generalType = $(this).val();
+                var options = refinedOptions[generalType] || [];
+
+                var refinedSelect = $('#refinedType');
+                refinedSelect.empty();
+                for (var i = 0; i < options.length; i++) {
+                    refinedSelect.append($('<option>', {
+                        value: options[i],
+                        text: options[i]
+                    }));
+                }
+
+                $('#refinedOptions').show();
+                refinedSelect.select2({
+                    placeholder: "Search for refined food types",
+                    allowClear: true
+                });
+            });
+        });
+    </script>
 </body>
 </html>

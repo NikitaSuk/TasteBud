@@ -5,7 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Restaurant Recommender</title>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        .refined-options {
+            position: absolute;
+            top: 0;
+            left: 100%;
+            width: 200px;
+            z-index: 9999;
+            display: none;
+        }
+
+        #refinedOptionsDropdown {
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -30,9 +43,7 @@
                 </select>
                 
                 <!-- Side dropdown for refined options -->
-                <div id="refinedOptions" class="refined-options">
-                    <!-- Options will be populated using JavaScript -->
-                </div>
+                <select id="refinedOptionsDropdown" class="form-control refined-options" style="display: none;"></select>
             </div>
             
             <button type="submit" class="btn btn-primary">Recommend</button>
@@ -65,10 +76,11 @@
 
             // Display the refined options side dropdown when hovering over or clicking on an option
             $('#foodTypes').on('select2:open', function(e) {
-                var $dropdown = $('<select id="refinedOptionsDropdown" class="form-control"></select>');
+                var $dropdown = $('#refinedOptionsDropdown');
                 var selectedOption = $(e.target).val();
                 var options = refinedOptions[selectedOption] || [];
                 
+                $dropdown.empty();
                 for (var i = 0; i < options.length; i++) {
                     $dropdown.append($('<option>', {
                         value: options[i],
@@ -78,29 +90,21 @@
 
                 $dropdown.select2({
                     placeholder: "Search for refined food types",
-                    allowClear: true
+                    allowClear: true,
+                    dropdownParent: $('.refined-options')
                 });
 
                 $dropdown.on('select2:select', function(e) {
                     $('#foodTypes').val(e.params.data.text).trigger('change');
                 });
 
-                $('.refined-options').html($dropdown);
+                $('.refined-options').show();
+            });
+
+            $('#foodTypes').on('select2:close', function(e) {
+                $('.refined-options').hide();
             });
         });
     </script>
-    
-    <style>
-        .refined-options {
-            position: relative;
-            display: inline-block;
-            margin-left: 20px;
-        }
-
-        #refinedOptionsDropdown {
-            width: 200px;
-            z-index: 9999;
-        }
-    </style>
 </body>
 </html>

@@ -18,6 +18,11 @@
         #refinedOptionsDropdown {
             width: 100%;
         }
+
+        .refined-search {
+            width: 100%;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -29,20 +34,13 @@
             <div class="form-group">
                 <label for="foodTypes">Select your food type:</label>
                 <select name="foodTypes" id="foodTypes" class="form-control">
-                    <option value="American">American</option>
-                    <option value="Italian">Italian</option>
-                    <option value="Mexican">Mexican</option>
-                    <option value="Asian">Asian</option>
-                    <option value="Seafood">Seafood</option>
-                    <option value="Fast Food">Fast Food</option>
-                    <option value="Sandwiches & Deli">Sandwiches & Deli</option>
-                    <option value="Pizza">Pizza</option>
-                    <option value="Steak & BBQ">Steak & BBQ</option>
-                    <option value="Other International">Other International</option>
-                    <option value="Other">Other</option>
+                    {% for food_type in food_types %}
+                    <option value="{{ food_type }}">{{ food_type }}</option>
+                    {% endfor %}
                 </select>
-                
-                <!-- Side dropdown for refined options -->
+
+                <!-- Side search bar for refined options -->
+                <input type="text" id="refinedOptionsSearch" class="form-control refined-search" placeholder="Search for refined food types" style="display: none;"/>
                 <select id="refinedOptionsDropdown" class="form-control refined-options" style="display: none;"></select>
             </div>
             
@@ -59,50 +57,45 @@
                 allowClear: true
             });
 
-            // Define the refined options
-            var refinedOptions = {
-                'American': ['American', 'Bar', 'Burgers', 'BBQ', 'Sports Bar', 'Burger', 'New American', 'Cheesecake', 'Diner', 'Grill', 'Southern'],
-                'Italian': ['Italian', 'Mediterranean', 'Greek', 'Pizza', 'Pasta', 'Deli'],
-                'Mexican': ['Mexican', 'Fast Food', 'Sports Bar', 'Seafood', 'Asian', 'Salvadoran', 'Grill', 'Exotic', 'Fine Dining', 'Family-friendly'],
-                'Asian': ['Thai', 'Ramen', 'Seafood', 'Buffet', 'Vietnamese', 'Korean', 'Japanese', 'Chinese'],
-                'Seafood': ['Seafood', 'Steak', 'Sushi'],
-                'Fast Food': ['Fast Food', 'Chicken Sandwiches', 'Burgers', 'Sandwiches'],
-                'Sandwiches & Deli': ['Takeout', 'Cafe', 'Bakery', 'Sandwich'],
-                'Pizza': ['Pizza'],
-                'Steak & BBQ': ['Steak', 'Sushi', 'Burgers'],
-                'Other International': ['Eastern European', 'Pan-European', 'French', 'Jamaican', 'Dominican', 'Bangladeshi', 'Barbeque', 'African', 'Colombian', 'Wings', 'Indian', 'Exotic', 'Brunch', 'Sports Bar', 'Restaurant', 'Fine Dining'],
-                'Other': ['Bar', 'Chicken', 'New American', 'Exotic', 'Brunch', 'Family-friendly', 'Sports Bar', 'Restaurant', 'French', 'Grill']
-            };
-
-            // Display the refined options side dropdown when hovering over or clicking on an option
-            $('#foodTypes').on('select2:open', function(e) {
-                var $dropdown = $('#refinedOptionsDropdown');
-                var selectedOption = $(e.target).val();
-                var options = refinedOptions[selectedOption] || [];
-                
-                $dropdown.empty();
-                for (var i = 0; i < options.length; i++) {
-                    $dropdown.append($('<option>', {
-                        value: options[i],
-                        text: options[i]
-                    }));
-                }
-
-                $dropdown.select2({
-                    placeholder: "Search for refined food types",
-                    allowClear: true,
-                    dropdownParent: $('.refined-options')
-                });
-
-                $dropdown.on('select2:select', function(e) {
-                    $('#foodTypes').val(e.params.data.text).trigger('change');
-                });
-
-                $('.refined-options').show();
+            $('#foodTypes').on('select2:select', function(e) {
+                var selectedOption = e.params.data.text;
+                fetchRefinedOptions(selectedOption);
             });
+
+            function fetchRefinedOptions(selectedFoodType) {
+                $.ajax({
+                    url: '/get_refined_options',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ 'selected_food_type': selectedFoodType }),
+                    success: function(data) {
+                        var $dropdown = $('#refinedOptionsDropdown');
+                        var $searchBar = $('#refinedOptionsSearch');
+                        
+                        $dropdown.empty();
+                        for (var i = 0; i < data.length; i++) {
+                            $dropdown.append($('<option>', {
+                                value: data[i],
+                                text: data[i]
+                            }));
+                        }
+
+                        $dropdown.select2({
+                            placeholder: "Search for refined food types",
+                            allowClear: true,
+                            dropdownParent: $('.refined-options')
+                        });
+
+                        $searchBar.val('').trigger('change');
+                        $('.refined-options').show();
+                        $searchBar.show();
+                    }
+                });
+            }
 
             $('#foodTypes').on('select2:close', function(e) {
                 $('.refined-options').hide();
+                $('#refinedOptionsSearch').hide();
             });
         });
     </script>

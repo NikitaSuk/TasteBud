@@ -63,30 +63,10 @@
                 'Other': ['Bar', 'Chicken', 'New American', 'Exotic', 'Brunch', 'Family-friendly', 'Sports Bar', 'Restaurant', 'French', 'Grill']
             };
 
-            $('#foodTypes').on('change', function() {
-                var selectedOption = $(this).val();
-                var options = refinedOptions[selectedOption] || [];
-                var refinedSelect = $('#refinedOptions');
-                
-                refinedSelect.empty();
-                for (var i = 0; i < options.length; i++) {
-                    refinedSelect.append($('<option>', {
-                        value: options[i],
-                        text: options[i]
-                    }));
-                }
-
-                refinedSelect.select2({
-                    placeholder: "Search for refined food types",
-                    allowClear: true
-                });
-            });
-            
             // Display the refined options side dropdown when hovering over or clicking on an option
-            $('#foodTypes').on('select2:opening', function(e) {
-                var $select = $(this);
+            $('#foodTypes').on('select2:open', function(e) {
                 var $dropdown = $('<select id="refinedOptionsDropdown" class="form-control"></select>');
-                var selectedOption = $select.val();
+                var selectedOption = $(e.target).val();
                 var options = refinedOptions[selectedOption] || [];
                 
                 for (var i = 0; i < options.length; i++) {
@@ -102,7 +82,7 @@
                 });
 
                 $dropdown.on('select2:select', function(e) {
-                    $select.val(e.params.data.text).trigger('change');
+                    $('#foodTypes').val(e.params.data.text).trigger('change');
                 });
 
                 $('.refined-options').html($dropdown);
@@ -113,12 +93,11 @@
     <style>
         .refined-options {
             position: relative;
+            display: inline-block;
+            margin-left: 20px;
         }
 
         #refinedOptionsDropdown {
-            position: absolute;
-            top: 0;
-            left: 100%;
             width: 200px;
             z-index: 9999;
         }
